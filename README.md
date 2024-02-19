@@ -1,0 +1,1 @@
+A hobby project aimed at automating the retrieval of income statements and balance sheets for financial analysis. The project's ultimate objective is to gather data from specified ticker symbols, process the received values, and provide insights to assist in making informed stock investment decisions.
