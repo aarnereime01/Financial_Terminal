@@ -4,11 +4,11 @@ from .scrapers.fundamentals import Fundamentals
 from .scrapers.insiders import Insiders
 
 class Ticker:
-
-    def __init__(self, ticker: str):
+    def __init__(self, ticker: str, freq: str = 'annual'):
         self.ticker = ticker
+        self.freq = freq
 
-        self._fundamentals = Fundamentals(self.ticker)
+        self._fundamentals = Fundamentals(self.ticker, self.freq)
         self._indsiders = Insiders(self.ticker)
 
     def __repr__(self) -> str:

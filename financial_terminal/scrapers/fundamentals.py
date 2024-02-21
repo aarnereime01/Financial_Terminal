@@ -5,9 +5,9 @@ from ..utils.formatter import format_raw_to_df
 from ..utils import const
 
 class Fundamentals:
-
-    def __init__(self, ticker: str):
+    def __init__(self, ticker: str, freq: str):
         self.ticker = ticker
+        self.freq = freq
 
     def get_balance_sheet(self):
         return self.fetch_timeseries('balance-sheet')
@@ -18,13 +18,16 @@ class Fundamentals:
     def get_cash_flow(self):
         return self.fetch_timeseries('cash-flow')
 
-
     def fetch_timeseries(self, name: str):
         url = f'https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/{self.ticker}'
 
+        trailing_categories = ','.join(['trailing' + x for x in const.fundamentals[name]])
+        other_categories = ','.join([self.freq + x for x in const.fundamentals[name]])
+        comined_categories = ','.join([trailing_categories, other_categories])
+
         query_parameters = {
             'symbol': self.ticker,
-            'type': ','.join(const.fundamentals[name]),
+            'type': comined_categories,
             'merge': 'false',
             'period1': '493590046',
             'period2': str(int(datetime.now().timestamp())),
