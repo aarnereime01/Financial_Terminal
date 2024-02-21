@@ -1,17 +1,16 @@
 from datetime import datetime
 
 from ..utils.requests import yahoo_api_request
+from ..utils.formatter import format_raw_to_df
 
 class Fundamentals:
 
     def __init__(self, ticker: str):
         self.ticker = ticker
-        self.period1 = '493590046'
-        self.period2 = self.convert_datetime_now()
 
-    def convert_datetime_now(self) -> int:
-        date = str(int(datetime.now().timestamp()))
-        return date
+        self.period1 = '493590046'
+        self.period2 = str(int(datetime.now().timestamp()))
+
 
     def get_balance_sheet(self):
         url = f'https://query1.finance.yahoo.com/ws/fundamentals-timeseries/v1/finance/timeseries/{self.ticker}'
@@ -24,7 +23,8 @@ class Fundamentals:
             'corsDomain': 'finance.yahoo.com'
         }
         response = yahoo_api_request(url, params)
-        return response
+        df = format_raw_to_df(response)
+        return df
 
 
         
