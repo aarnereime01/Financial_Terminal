@@ -1,10 +1,8 @@
 from financial_terminal import ticker
-import pandas as pd
 
 apple = ticker.Ticker("AAPL")
 
-res = apple.balance_sheet
+res = apple.income_statement
 print(res)
 
         
-    
