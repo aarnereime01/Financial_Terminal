@@ -5,14 +5,14 @@ from .scrapers.insiders import Insiders
 
 class Ticker:
     def __init__(self, ticker: str, freq: str = 'annual'):
-        self.ticker = ticker
+        self.ticker = ticker.upper()
         self.freq = freq
 
         self._fundamentals = Fundamentals(self.ticker, self.freq)
         self._indsiders = Insiders(self.ticker)
 
     def __repr__(self) -> str:
-        return f'Ticker of stock: {self.ticker}'
+        return f'Ticker: {self.ticker}'
     
     @property
     def balance_sheet(self) -> pd.DataFrame:

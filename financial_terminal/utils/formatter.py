@@ -2,12 +2,11 @@ import pandas as pd
 from collections import defaultdict
 
 
-def format_raw_to_df(data: dict) -> pd.DataFrame:
+def format_json_to_df(data: dict) -> pd.DataFrame:
     data_dict = defaultdict(dict)
     for entry in data['timeseries']['result']:
         category = entry['meta']['type'][0]
-        category_fixed = category[0].upper() + category[1:]
-        category_name = category_fixed.replace('Trailing', '').replace('Annual', '').replace('Quarterly', '')
+        category_name = category.replace('trailing', '').replace('annual', '').replace('quarterly', '')
         try:
             for value_entry in entry[category]:
                 if category[0] == 't':

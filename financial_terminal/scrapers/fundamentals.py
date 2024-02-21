@@ -1,7 +1,7 @@
 from datetime import datetime
 import requests
 
-from ..utils.formatter import format_raw_to_df
+from ..utils.formatter import format_json_to_df
 from ..utils import const
 
 class Fundamentals:
@@ -46,7 +46,7 @@ class Fundamentals:
         try:
             response = requests.get(url, headers=headers, params=query_parameters)
             response.raise_for_status()  # Raise an exception for HTTP errors
-            df = format_raw_to_df(response.json())
+            df = format_json_to_df(response.json())
             return df
         except requests.exceptions.RequestException as e:
             print(f"Request failed: {e}")
