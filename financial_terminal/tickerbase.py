@@ -5,16 +5,14 @@ from .scrapers.insiders import Insiders
 
 class TickerBase:
 
-    def __init__(self, ticker: str, exchange: str, currency: str):
+    def __init__(self, ticker: str):
         self.ticker = ticker
-        self.exchange = exchange
-        self.currency = currency
 
-        self._fundamentals = Fundamentals(self._data, self.ticker)
-        self._indsiders = Insiders(self._data, self.ticker)
+        self._fundamentals = Fundamentals(self.ticker)
+        self._indsiders = Insiders(self.ticker)
 
     def __repr__(self) -> str:
-        return f"{self.ticker} ({self.exchange})"
+        return f'Ticker of stock: {self.ticker}'
     
-    def get_year_over_year(self) -> pd.DataFrame:
-        pass
+    def get_balance_sheet(self) -> pd.DataFrame:
+        return self._fundamentals.get_balance_sheet()
