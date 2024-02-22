@@ -25,3 +25,7 @@ class Ticker:
     @property
     def cash_flow(self) -> pd.DataFrame:
         return self._fundamentals.get_cash_flow()
+    
+    @property
+    def insider(self) -> pd.DataFrame:
+        return self._indsiders.get_insider_transactions()
