@@ -2,6 +2,8 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
+from ..utils.formatter import format_insiders
+
 class Insiders:
     def __init__(self, ticker: str):
         self.ticker = ticker
@@ -43,5 +45,7 @@ class Insiders:
             data_dict[idx] = [filing_date, trade_date, ticker, insider_name, title, trade_type, price, quantity, owned, owned_change, value]
 
         df = pd.DataFrame.from_dict(data_dict, orient='index', columns=columns[1:12])
+        df.rename(columns={'ΔOwn': 'Owned Change'}, inplace=True)
+        df = format_insiders(df)
         return df
     

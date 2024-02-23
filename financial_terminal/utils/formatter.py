@@ -2,7 +2,7 @@ import pandas as pd
 from collections import defaultdict
 
 
-def format_json_to_df(data: dict) -> pd.DataFrame:
+def format_fundementals(data: dict) -> pd.DataFrame:
     data_dict = defaultdict(dict)
     for entry in data['timeseries']['result']:
         category = entry['meta']['type'][0]
@@ -24,3 +24,15 @@ def format_json_to_df(data: dict) -> pd.DataFrame:
     data_df = data_df.sort_index(axis=0)
     
     return data_df
+
+
+def format_insiders(df: pd.DataFrame) -> pd.DataFrame:
+    df['Filing Date'] = pd.to_datetime(df['Filing Date'])
+    df['Trade Date'] = pd.to_datetime(df['Trade Date'])
+    df['Price'] = df['Price'].str.replace('$', '').astype(float)
+    df['Qty'] = df['Qty'].str.replace(',', '').astype(int)
+    df['Owned'] = df['Owned'].str.replace(',', '').astype(int)
+    df['Owned Change'] = df['Owned Change'].str.replace('+', '').str.replace('-', '').str.replace('%', '').astype(float) / 100
+    df['Value'] = df['Value'].str.replace('$', '').str.replace(',', '').astype(float)
+    
+    return df
