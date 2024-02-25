@@ -18,7 +18,7 @@ class Insiders:
             '4y': '1461',
         }
         
-    def format_historical(self,df: pd.DataFrame) -> pd.DataFrame:
+    def format_insiders(self,df: pd.DataFrame) -> pd.DataFrame:
         df['Filing Date'] = pd.to_datetime(df['Filing Date'])
         df['Trade Date'] = pd.to_datetime(df['Trade Date'])
         df['Price'] = df['Price'].str.replace('$', '').astype(float)
@@ -58,5 +58,5 @@ class Insiders:
         df = pd.DataFrame.from_dict(
             data_dict, orient='index', columns=columns[1:12])
         df.rename(columns={'ΔOwn': 'Owned Change'}, inplace=True)
-        df = self.format_historical(df)
+        df = self.format_insiders(df)
         return df

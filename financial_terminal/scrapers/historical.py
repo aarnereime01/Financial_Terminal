@@ -38,7 +38,7 @@ class Historical:
             print(f"Request failed: {e}")
             return None
         
-    def _format(self, data: dict) -> pd.DataFrame:
+    def format_historical(self, data: dict) -> pd.DataFrame:
         df = pd.DataFrame(data['chart']['result'][0]['indicators']['quote'][0])
         df['date'] = pd.to_datetime(data['chart']['result'][0]['timestamp'], unit='s')
         df.set_index('date', inplace=True)
@@ -46,4 +46,4 @@ class Historical:
         
     def get_historical(self):
         response = self.fetch_historical()
-        return self._format(response)
+        return self.format_historical(response)
