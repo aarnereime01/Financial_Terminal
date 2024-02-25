@@ -4,6 +4,7 @@ import pandas as pd
 
 from ..utils.formatter import format_insiders
 
+
 class Insiders:
     def __init__(self, ticker: str):
         self.ticker = ticker
@@ -22,14 +23,15 @@ class Insiders:
 
     def get_insider_transactions(self, period: str = '1y'):
         data_dict = {}
-        url = f'http://openinsider.com/screener?s={self.ticker}&o=&pl=&ph=&ll=&lh=&fd={self.filing_date[period]}&fdr=&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&xs=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=100&page=1'
+        url = f'http://openinsider.com/screener?s={self.ticker}&o=&pl=&ph=&ll=&lh=&fd={
+            self.filing_date[period]}&fdr=&td=0&tdr=&fdlyl=&fdlyh=&daysago=&xp=1&xs=1&vl=&vh=&ocl=&och=&sic1=-1&sicl=100&sich=9999&grp=0&nfl=&nfh=&nil=&nih=&nol=&noh=&v2l=&v2h=&oc2l=&oc2h=&sortcol=0&cnt=100&page=1'
         response = requests.get(url)
         soup = BeautifulSoup(response.content, 'html.parser')
         table = soup.find_all('table')[11]
         columns = [th.text for th in table.find('tr').find_all('th')]
         columns = [x.replace('\xa0', ' ').strip() for x in columns]
 
-        rows = table.find_all('tr')[1:] 
+        rows = table.find_all('tr')[1:]
         for idx, row in enumerate(rows):
             filing_date = row.find_all('div')[0].text
             trade_date = row.find_all('div')[1].text
@@ -42,10 +44,11 @@ class Insiders:
             owned = row.find_all('td')[9].text
             owned_change = row.find_all('td')[10].text
             value = row.find_all('td')[11].text
-            data_dict[idx] = [filing_date, trade_date, ticker, insider_name, title, trade_type, price, quantity, owned, owned_change, value]
+            data_dict[idx] = [filing_date, trade_date, ticker, insider_name,
+                              title, trade_type, price, quantity, owned, owned_change, value]
 
-        df = pd.DataFrame.from_dict(data_dict, orient='index', columns=columns[1:12])
+        df = pd.DataFrame.from_dict(
+            data_dict, orient='index', columns=columns[1:12])
         df.rename(columns={'ΔOwn': 'Owned Change'}, inplace=True)
         df = format_insiders(df)
         return df
-    

@@ -2,7 +2,7 @@ import pandas as pd
 from collections import defaultdict
 
 
-def format_fundementals(data: dict) -> pd.DataFrame:
+def format_financials(data: dict) -> pd.DataFrame:
     data_dict = defaultdict(dict)
     for entry in data['timeseries']['result']:
         category = entry['meta']['type'][0]
