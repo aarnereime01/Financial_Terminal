@@ -1,14 +1,16 @@
 import pandas as pd
 
-from .scrapers.yahooAPI import YahooFinanceAPI
+from .scrapers.financials import Financials
 from .scrapers.insiders import Insiders
+from .scrapers.historical import Historical
 
 class Ticker:
     def __init__(self, ticker: str, freq: str = 'annual'):
         self.ticker = ticker.upper()
         self.freq = freq
 
-        self._financials = YahooFinanceAPI(self.ticker, self.freq)
+        self._historical = Historical(self.ticker)
+        self._financials = Financials(self.ticker, self.freq)
         self._indsiders = Insiders(self.ticker)
 
     def __repr__(self) -> str:
@@ -30,6 +32,9 @@ class Ticker:
     def insider(self) -> pd.DataFrame:
         return self._indsiders.get_insider_transactions()
     
+    # get statitical data
+    
     @property
     def historical(self) -> pd.DataFrame:
-        return self._financials.fetch_historical()
+        return self._historical.get_historical()
+    

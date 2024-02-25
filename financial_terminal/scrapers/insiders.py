@@ -2,9 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import pandas as pd
 
-from ..utils.formatter import format_insiders
-
-
 class Insiders:
     def __init__(self, ticker: str):
         self.ticker = ticker
@@ -20,6 +17,17 @@ class Insiders:
             '2y': '730',
             '4y': '1461',
         }
+        
+    def format_historical(self,df: pd.DataFrame) -> pd.DataFrame:
+        df['Filing Date'] = pd.to_datetime(df['Filing Date'])
+        df['Trade Date'] = pd.to_datetime(df['Trade Date'])
+        df['Price'] = df['Price'].str.replace('$', '').astype(float)
+        df['Qty'] = df['Qty'].str.replace(',', '').astype(int)
+        df['Owned'] = df['Owned'].str.replace(',', '').astype(int)
+        df['Owned Change'] = df['Owned Change'].str.replace('+', '').str.replace('-', '').str.replace('%', '').astype(float) / 100
+        df['Value'] = df['Value'].str.replace('$', '').str.replace(',', '').astype(float)
+    
+        return df
 
     def get_insider_transactions(self, period: str = '1y'):
         data_dict = {}
@@ -50,5 +58,5 @@ class Insiders:
         df = pd.DataFrame.from_dict(
             data_dict, orient='index', columns=columns[1:12])
         df.rename(columns={'ΔOwn': 'Owned Change'}, inplace=True)
-        df = format_insiders(df)
+        df = self.format_historical(df)
         return df
