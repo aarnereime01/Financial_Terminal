@@ -87,7 +87,7 @@ fundamentals = {
                   'ClassesofCashPayments', 'ForeignSales', 'SaleOfInvestment', 'ShortTermDebtIssuance', 'InterestPaidDirect', 'FreeCashFlow', 
                   'InterestReceivedDirect', 'ClassesofCashReceiptsfromOperatingActivities', 'SaleOfBusiness', 'DividendsReceivedCFI', 
                   'CommonStockIssuance', 'InterestPaidCFF', 'ChangeInIncomeTaxPayable']
-},
+}
 statistics = {
     'information': []
 }

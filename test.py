@@ -1,8 +1,4 @@
-from financial_terminal import ticker
-import plotly.express as px
+from financial_terminal.data import stock_data as sd
 
-stock = ticker.Ticker('msft')
-df = stock.historical
+stock = sd.StockData('msft')
 
-fig = px.line(df, x=df.index, y="close", title='Microsoft Stock Price')
-fig.show()
