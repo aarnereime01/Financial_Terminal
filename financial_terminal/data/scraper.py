@@ -29,11 +29,12 @@ class Scraper:
 
 
 class YahooFinanceScraper(Scraper):
-    PAGES = ['key-statistics',
-            #  'financials',
-            #  'balance-sheet',
-            #  'cash-flow'
-             ]
+    PAGES = [
+            'key-statistics',
+            'financials',
+            'balance-sheet',
+            'cash-flow'
+        ]
 
     def __init__(self, ticker: str):
         self.ticker = ticker.upper()
@@ -68,6 +69,7 @@ class YahooFinanceScraper(Scraper):
             expand_button.click()
         except Exception as e:
             print(f"Error expanding buttons: {e}")
+            
 
     def fetch_page_content(self, page) -> str:
         """
@@ -79,9 +81,18 @@ class YahooFinanceScraper(Scraper):
 
         if not self.passed_privacy_popup:
             self.bypass_privacy_popup()
+            
+        max_attempts = 5
+        attempts = 0
 
         if page in ['financials', 'balance-sheet', 'cash-flow']:
-            self.expand_all()
+            # Try spamming the expand button since it sometimes doesn't work on the first try
+            while attempts < max_attempts:
+                try:
+                    self.expand_all()
+                    break
+                except:
+                    attempts += 1
 
         html = self.driver.page_source
         return html

@@ -1,5 +1,6 @@
 from .scraper import YahooFinanceScraper
 from ..utils.formatter import Formatter
+import json
 
 
 class StockData():
@@ -25,4 +26,5 @@ class StockData():
         """
         raw_data = self.get_raw_data()
         formatted_data = self.format_data(raw_data)
+        print(formatted_data)
         print(f"Formatted Data for {self.ticker}")
