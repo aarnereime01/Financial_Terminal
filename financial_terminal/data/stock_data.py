@@ -10,13 +10,16 @@ class StockData():
         self.ticker = ticker.upper()
         self.formatter = Formatter()
 
+
     def get_raw_data(self) -> dict:
         """Retrieves raw data by scraping"""
         return self.scraper.parse_pages()
 
+
     def format_data(self, data: dict) -> dict:
         """Formats the scraped data"""
         return self.formatter.format_all(data)
+
 
     def main(self) -> None:
         """
