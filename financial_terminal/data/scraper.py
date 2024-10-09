@@ -29,10 +29,6 @@ class Driver:
         return options
 
 
-    def close(self) -> None:
-        self.driver.quit()
-
-
 class YahooFinanceScraper():
     BASE_SLEEP_TIME = 1  # Min sleep time between requests
     MAX_SLEEP_TIME = 2  # Max sleep time between requests
@@ -87,7 +83,8 @@ class YahooFinanceScraper():
         try:
             return self.fetch_page_content(page, driver)
         finally:
-            driver.close()
+            driver.quit()
+            print(f'Quit driver for {page}')
             self.random_sleep()
 
 
@@ -97,6 +94,9 @@ class YahooFinanceScraper():
         """
         driver.get(page)
         self.bypass_privacy_popup(driver)
+        
+        # Check if the stock has all available financial data
+        
 
         if page in [f'https://finance.yahoo.com/quote/{self.ticker}/financials/',
                     f'https://finance.yahoo.com/quote/{self.ticker}/balance-sheet/',

@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup as bs, Tag
-from pprint import pprint
 import pandas as pd
 
 
