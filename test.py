@@ -13,7 +13,7 @@ pd.set_option('display.max_rows', None)
 # Path to store the CSV file
 FILE_PATH = "stock_metrics.csv"
 
-def update_database(_index, ticker, metrics):
+def update_database(ticker, metrics):
     
     if os.path.exists(FILE_PATH):
         df = pd.read_csv(FILE_PATH)
@@ -38,7 +38,7 @@ def update_database(_index, ticker, metrics):
     else:
         # Add the stock to the DataFrame
         new_row = [ticker] + list(metrics.values())
-        df.loc[_index] = new_row
+        df.loc[len(df)] = new_row
 
     # Save the DataFrame to a CSV file
     df.to_csv(FILE_PATH, index=False)
@@ -153,8 +153,7 @@ if __name__ == '__main__':
     print("Running the main function")
     stocks_to_process, stocks_in_df = get_sp500_tickers()
     count = 1
-    for _index, stock in enumerate(stocks_to_process):
-        _index = (_index + 1) + stocks_in_df
+    for stock in stocks_to_process:
         print(f"Processing stock: {stock}")
         ticker = sd.StockData(stock) 
         formatted_data = ticker.main()
@@ -163,7 +162,7 @@ if __name__ == '__main__':
         metrics = mc.Calculations(formatted_data).main()
          
         # Update the stock metrics in the DataFrame
-        update_database(_index, ticker.ticker, metrics)
+        update_database(ticker.ticker, metrics)
         
         print(f"Finished processing stock: {stock}, {count}/{len(stocks_to_process)}")
         count += 1    

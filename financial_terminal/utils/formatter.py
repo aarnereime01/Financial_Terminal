@@ -34,7 +34,7 @@ class Formatter:
 
 
     def format_valuation_measures(self, soup: bs) -> dict:
-        table = soup.find('table', class_='yf-104jbnt')
+        table = soup.find('table', class_='table yf-1c0gmzx')
         if not table:
             return None
 
