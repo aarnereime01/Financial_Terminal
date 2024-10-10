@@ -17,9 +17,9 @@ class Driver:
         options = webdriver.ChromeOptions()
         options.add_argument('--disable-search-engine-choice-screen')
         options.add_argument('--headless')  # Hide chrome will scraping
-        options.add_argument("--disable-gpu")
-        options.add_argument("--no-sandbox")
-        options.add_argument("--disable-extensions")
+        # options.add_argument("--disable-gpu")
+        # options.add_argument("--no-sandbox")
+        # options.add_argument("--disable-extensions")
         prefs = {
             "profile.managed_default_content_settings.images": 2,
             "profile.default_content_settings.cookies": 2
@@ -30,8 +30,8 @@ class Driver:
 
 
 class YahooFinanceScraper():
-    BASE_SLEEP_TIME = 1  # Min sleep time between requests
-    MAX_SLEEP_TIME = 2  # Max sleep time between requests
+    BASE_SLEEP_TIME = 2  # Min sleep time between requests
+    MAX_SLEEP_TIME = 5  # Max sleep time between requests
 
     def __init__(self, ticker: str):
         self.ticker = ticker.upper()
@@ -52,7 +52,7 @@ class YahooFinanceScraper():
         privacy pop-up, this code snippet bypasses the pop-up by denying the privacy setting.
         """
         try:
-            privacy_button = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.NAME, 'reject')))
+            privacy_button = WebDriverWait(driver, 30).until(EC.element_to_be_clickable((By.NAME, 'reject'))) # reject or agree
             privacy_button.click()
         except Exception as e:
             print(f"Error handling the privacy pop-up: {e}")
@@ -67,6 +67,7 @@ class YahooFinanceScraper():
         try:
             expand_button = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CLASS_NAME, 'expand')))
             expand_button.click()
+            self.random_sleep()
             
             # Wait for the table to expand
             WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CSS_SELECTOR, "div.row.lv-1.yf-1xjz32c")))
@@ -85,7 +86,6 @@ class YahooFinanceScraper():
         finally:
             driver.quit()
             print(f'Quit driver for {page}')
-            self.random_sleep()
 
 
     def fetch_page_content(self, page, driver) -> str:
@@ -96,13 +96,14 @@ class YahooFinanceScraper():
         self.bypass_privacy_popup(driver)
         
         # Check if the stock has all available financial data
-        
+        self.random_sleep()
 
         if page in [f'https://finance.yahoo.com/quote/{self.ticker}/financials/',
                     f'https://finance.yahoo.com/quote/{self.ticker}/balance-sheet/',
                     f'https://finance.yahoo.com/quote/{self.ticker}/cash-flow/']:
             self.expand_all(driver)
 
+        self.random_sleep()
         html = driver.page_source
         return html
 
@@ -127,4 +128,5 @@ class YahooFinanceScraper():
             data = p.map(self.worker, pages_to_scrape)
             
         print(f"Time elapsed: {time.time() - start_time}")
+        self.random_sleep()
         return dict(zip(page_paths, data))

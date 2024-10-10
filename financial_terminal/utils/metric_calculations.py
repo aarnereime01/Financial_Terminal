@@ -240,7 +240,7 @@ class Calculations:
     def debt_to_equity_ratio(self):
         """
         The debt-to-equity ratio is a financial ratio indicating the relative proportion of shareholders' equity 
-        and debt used to finance a company's assets.
+        and debt used to finance a company's assets. 
         """
         try:
             total_debt_equity = self.data.get('key-statistics').get('financial_highlights').get('Total Debt/Equity (mrq)')

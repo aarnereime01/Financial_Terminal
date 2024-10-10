@@ -5,6 +5,7 @@ import pandas as pd
 import os
 import requests
 import bs4 as bs
+import numpy as np
 
 # display all rows
 pd.set_option('display.max_rows', None)
@@ -96,10 +97,7 @@ def give_scores(score_df):
 
     for metric, order in sorting_map.items():
         # Sort the metric and assign ranks
-        if order == 'higher':
-            ranked = score_df[metric].rank(ascending=False)
-        else:
-            ranked = score_df[metric].rank(ascending=True)
+        ranked = score_df[metric].rank(ascending=order)
             
         # Assign scores: highest rank gets highest score
         scores[metric + ' Score'] = ranked
@@ -168,8 +166,12 @@ if __name__ == '__main__':
         update_database(_index, ticker.ticker, metrics)
         
         print(f"Finished processing stock: {stock}, {count}/{len(stocks_to_process)}")
-        count += 1
-        
+        count += 1    
+    
     score_df = pd.read_csv(FILE_PATH).copy(deep=True)
+    
+    # Fill na with the averge value of the column
+    score_df.fillna(score_df.select_dtypes(include=np.number).mean(), inplace=True)
+    
     # Give scores to the stocks
     give_scores(score_df)
