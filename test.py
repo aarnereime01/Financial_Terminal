@@ -8,7 +8,7 @@ import bs4 as bs
 import numpy as np
 
 # display all rows
-pd.set_option('display.max_rows', None)
+# pd.set_option('display.max_rows', None)
 
 # Path to store the CSV file
 FILE_PATH = "stock_metrics.csv"
