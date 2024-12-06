@@ -1,9 +1,11 @@
 from financial_terminal.data_retrieval import stock_data_handler as sd
+from financial_terminal.data_retrieval import xml_handler as xh
 
 import pandas as pd
 import os
 import requests
 import bs4 as bs
+import time
 
 
 def get_sp500_tickers():
@@ -14,23 +16,30 @@ def get_sp500_tickers():
     soup = bs.BeautifulSoup(resp.text, 'html.parser')
     table = soup.find('table', {'class': 'wikitable sortable sticky-header'})
     
-    tickers = []
+    ticker_data = {}
 
     # find all tr inside tbody
     for row in table.find_all('tr')[1:]:
-        ticker = row.find_all('td')[0].text
-        tickers.append(ticker)
         
-    tickers = [s.replace('\n', '') for s in tickers]
-    tickers = list(filter(None, tickers))
+        ticker = row.find_all('td')[0].get_text(strip=True)
+        
+        ticker_data[ticker] = {
+            'Sector': row.find_all('td')[2].get_text(strip=True),
+            'Sub-Industry': row.find_all('td')[3].get_text(strip=True),
+            'CIK': row.find_all('td')[6].get_text(strip=True),
+        }
     
-    return tickers
+    return ticker_data
+        
 
 if __name__ == '__main__':
     tickers = get_sp500_tickers()
+    print(f'Found {len(tickers)} tickers')
+    
+    xh.XMLHandler('COST', '0000909832').main()
     
     # Scrape the data for each stock
-    sd.StockDataHandler(tickers).main()
+    # sd.StockDataHandler(tickers).main()
     
     
     

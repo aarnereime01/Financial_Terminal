@@ -9,6 +9,9 @@ __pycache__/
 # Ignores csv files
 *.csv
 
+# Ignore companyfacts folder
+companyfacts/
+
 # Distribution / packaging
 .Python
 build/
